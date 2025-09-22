@@ -31,13 +31,20 @@ public class AutomationExerciseTest {
     static void tearDown() {
         driver.quit();
     }
-
+    @BeforeEach
+    void ensureLoggedOut() {
+        homePage.abrir();
+        if (homePage.isUsuarioLogado()) {
+            homePage.logout();
+        }
+    }
     @Test
     @Order(1)
     void testCadastroUsuario() {
         homePage.abrir();
         homePage.clicarSignupLogin();
-        signupPage.preencherFormulario("Lucas Teste", "lucasinfnet@gmail.com", "123456");
+        String emailUnico = "lucas" + System.currentTimeMillis() + "@gmail.com";
+        signupPage.preencherFormulario("Lucas Teste", emailUnico, "123456");
         signupPage.criarConta();
         Assertions.assertTrue(signupPage.getMsgContaCriada().isDisplayed(), "Conta deveria ter sido criada!");
     }
@@ -47,8 +54,9 @@ public class AutomationExerciseTest {
     void testLoginUsuario() {
         homePage.abrir();
         homePage.clicarSignupLogin();
-        loginPage.login("lucasinfnet@gmail.com", "123456");
+        loginPage.login("lucasinfsasanet@gmail.com", "123456");
         Assertions.assertTrue(loginPage.getUsuarioLogado().isDisplayed(), "Usuário deveria estar logado!");
+
     }
 
     @Test
